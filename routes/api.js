@@ -87,21 +87,21 @@ router.get(
   "/product",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-      User.findById(req.user._id, (err, user) => {
-          if (err) {
-              return res.json({ success: false, msg: "Unable to find user"});
-          }
-          
-          user.populate('products')
-            .then((user) => {
-                console.log(user.products);
-                res.json(user.products)
-            })
-            .catch((err) => {
-                console.log(err);
-                res.json({ success: false, msg: "unable to located products"})
-            })
-      });
+    User.findById(req.user._id, (err, user) => {
+      if (err) {
+        return res.json({ success: false, msg: "Unable to find user" });
+      }
+
+      user
+        .populate("products")
+        .then((user) => {
+          res.json(user.products);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.json({ success: false, msg: "unable to located products" });
+        });
+    });
   }
 );
 

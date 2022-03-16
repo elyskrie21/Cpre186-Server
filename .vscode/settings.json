@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/af92f5b1-a71e-48d0-bba7-2f62b6f5b4bd/resourceGroups/Cpre186/providers/Microsoft.Web/sites/moondeals",
+    "appService.deploySubpath": "."
+}
