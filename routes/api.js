@@ -106,4 +106,14 @@ router.get(
   }
 );
 
+router.get("/user", passport.authenticate("jwt", {session: false}), (req,res) => {
+  User.findById(req.user.id, (err, user) => {
+    if (err) {
+      return res.json({ success: false, msg: "Unable to find user "})
+    }
+
+    return res.json({ success: true, user: user}); 
+  })
+})
+
 module.exports = router;
