@@ -9,12 +9,13 @@ let User = require("../models/user");
 let Product = require("../models/product");
 
 router.post("/signup", (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    res.json({ success: false, msg: "Please pass a username and password" });
+  if (!req.body.username || !req.body.password || !req.body.email) {
+    res.json({ success: false, msg: "Please pass a username, password, and email" });
   } else {
     let newUser = new User({
       username: req.body.username,
       password: req.body.password,
+      email: req.body.email, 
     });
 
     // *saving user to database

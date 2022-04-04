@@ -11,6 +11,14 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  }, 
+  update: {
+    type: Boolean,
+    default: true,
   }
 }, {toJSON: {virtuals: true}, toObject: {virtuals: true}});
 
