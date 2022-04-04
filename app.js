@@ -1,19 +1,21 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cron = require('node-cron'); 
+const Update = require('./scripts/update'); 
 
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-let morgan = require('morgan');
-let mongoose = require('mongoose');
-let passport = require('passport');
-let config = require('./config/database'); 
-let cors = require('cors'); 
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const config = require('./config/database'); 
+const cors = require('cors'); 
 
-let app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,7 +39,7 @@ mongoose.connect(config.database)
   })
 
 // *connect api routes
-let api = require('./routes/api');
+const api = require('./routes/api');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -58,5 +60,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Cron scheduled tasks
+cron.schedule("0 0/6 * * *", function() {
+  Update(); 
+})
 
 module.exports = app;
