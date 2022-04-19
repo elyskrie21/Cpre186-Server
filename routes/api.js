@@ -10,12 +10,15 @@ let Product = require("../models/product");
 
 router.post("/signup", (req, res) => {
   if (!req.body.username || !req.body.password || !req.body.email) {
-    res.json({ success: false, msg: "Please pass a username, password, and email" });
+    res.json({
+      success: false,
+      msg: "Please pass a username, password, and email",
+    });
   } else {
     let newUser = new User({
       username: req.body.username,
       password: req.body.password,
-      email: req.body.email, 
+      email: req.body.email,
     });
 
     // *saving user to database
@@ -106,14 +109,43 @@ router.get(
   }
 );
 
-router.get("/user", passport.authenticate("jwt", {session: false}), (req,res) => {
-  User.findById(req.user.id, (err, user) => {
-    if (err) {
-      return res.json({ success: false, msg: "Unable to find user "})
-    }
+router.get(
+  "/user",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id, (err, user) => {
+      if (err) {
+        return res.json({ success: false, msg: "Unable to find user " });
+      }
 
-    return res.json({ success: true, user: user}); 
-  })
-})
+      return res.json({ success: true, user: user });
+    });
+  }
+);
+
+router.post(
+  "/product/:productID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Product.findById(req.params.productID, (err, product) => {
+      if (err) {
+        return res.json({ success: false, msg: "Unable to find product" });
+      }
+
+      if (product.user == req.user.id) {
+        Product.findByIdAndDelete(req.params.productID, (err) => {
+          if (err) {
+            return res.json({
+              success: false,
+              msg: "unable to delete product",
+            });
+          }
+
+          return res.json({ success: true, msg: "product was deleted" });
+        });
+      }
+    });
+  }
+);
 
 module.exports = router;
