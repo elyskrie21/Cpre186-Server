@@ -62,7 +62,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Cron scheduled tasks
-cron.schedule("0 0/6 * * *", function() {
+cron.schedule("0 0,6,12,18 * * *", function() {
   Update(); 
 })
 
